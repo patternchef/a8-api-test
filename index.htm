@@ -1,0 +1,77 @@
+<html>
+<head>
+<title>Gundam – Ajax JSON API</title>
+<style>
+body {font-family:georgia;font-size:12px;}
+#gundam {
+	border:1px solid #E77D2C;
+	-moz-border-radius: 5px; 
+	-webkit-border-radius: 5px;
+	width:400px;
+	list-style-type:none;
+	margin:0;
+	padding:0;
+}
+#gundam li {
+	padding:5px;
+}
+
+#gundam h1 {
+	font:14px georgia;
+	padding:5px;
+	color:#fff;
+	background:#E77D2C;
+	margin:0;
+}
+</style>
+<script src="http://code.jquery.com/jquery-latest.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {  
+
+	$('.category').click(function(e){
+        e.preventDefault(); 
+		cat = $(this).attr("href"); 
+		loadAJAX(cat); 
+	});
+});	
+
+
+function loadAJAX(cat)
+{
+	$.ajax({  
+		type: "GET",
+		dataType: "json",  
+		url: "api.php?cat=" + cat,
+		success: parseJSON,
+	});
+
+	$('#gundam').html('<h1 id="head">MyFavorite ' + cat + " Books</h1>");//change category of heading
+}
+
+function parseJSON(data){
+	$.each(data.gundams, function(i,item){
+	
+		var text = '<b>Title</b>:' + item.name + '<br />';
+		text += '<b>Media</b>:' + item.media + '<br />';
+		text += '<b>Year</b>:' + item.year + '<br />';
+		text += '<b>MSG Date</b>:' + item.msg_date + '<br />';
+	
+		$('<li></li>').html(text).appendTo('#gundam');  
+	});
+}
+
+</script>
+</head>
+	<body>
+		<div id="wrapper">
+			<ul>
+				<li><a href="gundams_name" class="category">gundams name</a><br /></li>
+				<li><a href="gundams_year" class="category">gundams year</a></li>
+			</ul>
+			<ul id="gundam">
+				<h1 id="head">My Favorite Books</h1>
+			</ul>
+		</div>	
+	</body>
+</html>
